@@ -16,7 +16,10 @@ while True:
     RequestTime = message.decode()
     #Til at kommunikerer med rest server
     #response = requests.get(URL + "/" + RequestTime)
+    Response = "Høj"
     print("RequestTime: ", (URL + "/" + RequestTime))
+
+    Serverocket.sendto(Response.encode(), clientAddress)
 
 
 
