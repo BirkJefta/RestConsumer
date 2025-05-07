@@ -5,21 +5,21 @@ from socket import *
 # til at kommunikerer med rapberry pi
 
 serverPort = 12000
-clientSocket = socket(AF_INET, SOCK_DGRAM)
+ServerSocket = socket(AF_INET, SOCK_DGRAM)
 serverAdress = ('', serverPort)
-clientSocket.bind(serverAdress)
+ServerSocket.bind(serverAdress)
 RequestTime = ""
 URL = "google.com"
 
 while True:
-    message, clientAddress = clientSocket.recvfrom(2048)
+    message, clientAddress = ServerSocket.recvfrom(2048)
     RequestTime = message.decode()
     #Til at kommunikerer med rest server
     #response = requests.get(URL + "/" + RequestTime)
     Response = "Høj"
     print("RequestTime: ", (URL + "/" + RequestTime))
 
-    Serverocket.sendto(Response.encode(), clientAddress)
+    ServerSocket.sendto(Response.encode(), clientAddress)
 
 
 
