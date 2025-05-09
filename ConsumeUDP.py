@@ -5,13 +5,13 @@ import time
 from socket import *
 
 
-
+#sørger for at starte den timeplanlagte opgave
 def RunSchedule():
     global runcount
     global jobref
     runcount = 0
     jobref = schedule.every().second.do(hourlySendPrice)
-
+# sørger for det maks er 24 timer herefter canceler den de forrige 24 timer hvorefter den starter forfra nederst
 def hourlySendPrice():
     global runcount, jobref
     sendPriceCategory()
@@ -37,7 +37,7 @@ def sendPriceCategory():
     clientSocket.close()
 
 
-
+#skal starte klokken midnat
 schedule.every().day.at("14:01").do(RunSchedule)
 
 
