@@ -13,20 +13,20 @@ def RunSchedule():
 def sendPriceCategory():
     serverPort = 12000
     broadcastAddress = ('255.255.255.255', serverPort)
-    ServerSocket = socket(AF_INET, SOCK_DGRAM)
-    ServerSocket.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+    clientSocket = socket(AF_INET, SOCK_DGRAM)
+    clientSocket.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
     CurrentTime = time.localtime().tm_hour
     hourNow = CurrentTime
     RequestTime = str(hourNow)
     URL = "google.com"
     #Response = requests.get(URL + "/" + RequestTime)
     Response = RequestTime
-    ServerSocket.sendto(Response.encode(), broadcastAddress)
-    ServerSocket.close()
+    clientSocket.sendto(Response.encode(), broadcastAddress)
+    clientSocket.close()
 
 
 
-schedule.every().day.at("12:00").do(RunSchedule)
+schedule.every().day.at("00:00").do(RunSchedule)
 
 
 while True:
