@@ -7,7 +7,19 @@ from socket import *
 
 
 def RunSchedule():
-    schedule.every().second.do(sendPriceCategory)
+    global runcount
+    global jobref
+    runcount = 0
+    jobref = schedule.every().second.do(hourlySendPrice)
+
+def hourlySendPrice():
+    global runcount, jobref
+    sendPriceCategory()
+    runcount += 1
+    print("runcount: " + str(runcount))
+    if runcount > 10:
+        schedule.cancel_job(jobref)
+        
 
 
 def sendPriceCategory():
@@ -26,21 +38,13 @@ def sendPriceCategory():
 
 
 
-schedule.every().day.at("13:23").do(RunSchedule)
+schedule.every().day.at("14:01").do(RunSchedule)
 
 
 while True:
     schedule.run_pending()
     time.sleep(1)
 
-#while True:
-    
-    #Til at kommunikerer med rest server
-    #Response = requests.get(URL + "/" + RequestTime)
-    #Response = "High"
-    #print("RequestTime: ", (URL + "/" + RequestTime))
-
-    #ServerSocket.sendto(Response.encode(), clientAddress)
 
 
 
