@@ -20,13 +20,13 @@ def sendPriceCategory():
     RequestTime = str(hourNow)
     URL = "google.com"
     #Response = requests.get(URL + "/" + RequestTime)
-    Response = RequestTime
+    Response = "high"
     clientSocket.sendto(Response.encode(), broadcastAddress)
     clientSocket.close()
 
 
 
-schedule.every().day.at("00:00").do(RunSchedule)
+schedule.every().day.at("13:23").do(RunSchedule)
 
 
 while True:
