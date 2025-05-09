@@ -12,11 +12,11 @@ RequestTime = ""
 URL = "google.com"
 
 while True:
-    message, clientAddress = ServerSocket.recvfrom(2048)
-    RequestTime = message.decode()
+    Message, clientAddress = ServerSocket.recvfrom(2048)
+    RequestTime = Message.decode()
     #Til at kommunikerer med rest server
-    #response = requests.get(URL + "/" + RequestTime)
-    Response = "Høj"
+    #Response = requests.get(URL + "/" + RequestTime)
+    Response = "High"
     print("RequestTime: ", (URL + "/" + RequestTime))
 
     ServerSocket.sendto(Response.encode(), clientAddress)
