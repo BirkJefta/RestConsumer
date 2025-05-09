@@ -4,9 +4,10 @@ import schedule
 import time
 from socket import *
 
-CurrentTime = time.localtime().tm_hour
-hourNow = CurrentTime
-RequestTime = str(hourNow)
+
+
+def RunSchedule():
+    schedule.every().second.do(sendPriceCategory)
 
 
 def sendPriceCategory():
@@ -14,16 +15,18 @@ def sendPriceCategory():
     broadcastAddress = ('255.255.255.255', serverPort)
     ServerSocket = socket(AF_INET, SOCK_DGRAM)
     ServerSocket.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+    CurrentTime = time.localtime().tm_hour
+    hourNow = CurrentTime
+    RequestTime = str(hourNow)
     URL = "google.com"
     #Response = requests.get(URL + "/" + RequestTime)
     Response = RequestTime
     ServerSocket.sendto(Response.encode(), broadcastAddress)
-    
     ServerSocket.close()
 
 
 
-schedule.every().hour.at(":00").do(sendPriceCategory)
+schedule.every().day.at("12:00").do(RunSchedule)
 
 
 while True:
