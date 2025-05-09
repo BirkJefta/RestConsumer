@@ -4,8 +4,8 @@ import schedule
 import time
 from socket import *
 
-
-hourNow = 0
+CurrentTime = time.localtime().tm_hour
+hourNow = CurrentTime
 RequestTime = str(hourNow)
 
 
@@ -18,10 +18,12 @@ def sendPriceCategory():
     #Response = requests.get(URL + "/" + RequestTime)
     Response = RequestTime
     ServerSocket.sendto(Response.encode(), broadcastAddress)
+    
+    ServerSocket.close()
 
 
 
-schedule.every(1).seconds.do(sendPriceCategory)
+schedule.every().hour.at(":00").do(sendPriceCategory)
 
 
 while True:
