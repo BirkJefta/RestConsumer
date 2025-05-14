@@ -5,18 +5,17 @@ import time
 from socket import *
 
 Zone = "Vest"
-URL = "http://localhost:5029/api/Elpris/"
+URL = "https://etrest-eaf7c7abe8hkdgh8.northeurope-01.azurewebsites.net/api/Elpris/"
 
-
+#metoder
 #sørger for at starte den timeplanlagte opgave
 def RunSchedule():
     global runcount
     global jobref
     runcount = 0
     print("RunSchedule")
-    #response = requests.get("https://etrest-eaf7c7abe8hkdgh8.northeurope-01.azurewebsites.net/api/Elpris/fromAPI/Vest")
-    #response = requests.get("https://etrest-eaf7c7abe8hkdgh8.northeurope-01.azurewebsites.net/api/Elpris/fromAPI/Øst")
-    response = requests.get("http://localhost:5029/api/Elpris/fromAPI/Vest")
+    response = requests.get(URL + "fromAPI/Vest")
+    response = requests.get(URL + "fromAPI/Øst")
     print("Response1: " + str(response))
     jobref = schedule.every().second.do(hourlySendPrice)
 # sørger for det maks er 24 timer herefter canceler den de forrige 24 timer hvorefter den starter forfra nederst
@@ -38,29 +37,22 @@ def sendPriceCategory():
     CurrentTime = time.localtime().tm_hour
     hourNow = CurrentTime
     RequestTime = str(hourNow)
-    #URL = "https://etrest-eaf7c7abe8hkdgh8.northeurope-01.azurewebsites.net/api/Elpris/" 
-    URL = "http://localhost:5029/api/Elpris/fromAPI/Vest"
-   #Response = requests.get(URL + Zone + "/" + RequestTime)
-    Response = requests.get("http://localhost:5029/api/Elpris/Vest/14")
+    getURL = URL + Zone + "/" + RequestTime
+    Response = requests.get(getURL)
     print("Response: " + str(Response))
-    data = Response.json()
-    EnergyPrice = {
-    "id": data.get("id"),
-    "dkK_per_kWh": data.get("dkK_per_kWh"),
-    "time_start": data.get("time_start"),
-    "Category": data.get("Category"),
-    }
-    print("EnergyPrice: " + str(EnergyPrice))
-    jsonCategory = json.dumps(EnergyPrice["dkK_per_kWh"])
-    print("jsonCategory: " + str(jsonCategory))
-    #clientSocket.sendto(jsonCategory, broadcastAddress)
+    #Skal laves om til category når den ikke er null mere og der er lavet en funktion til at udregne den
+    dkK_per_kWh = Response.json().get("dkK_per_kWh")
+    print("Price " + str(dkK_per_kWh))
+    message = json.dumps(dkK_per_kWh)
+    print("Message: " + message)
+    clientSocket.sendto(message.encode(), broadcastAddress)
     clientSocket.close()
 
-
+#kør en gang hver dag.
 #skal starte klokken midnat
 schedule.every().day.at("14:37").do(RunSchedule)
 
-
+#hoolder den tændt, så den kører schedule
 while True:
     schedule.run_pending()
     time.sleep(1)
