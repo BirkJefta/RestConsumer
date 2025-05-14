@@ -14,16 +14,16 @@ def RunSchedule():
     global jobref
     runcount = 0
     print("RunSchedule")
-    response = requests.get(URL + "fromAPI/Vest")
-    response = requests.get(URL + "fromAPI/Øst")
-    print("Response1: " + str(response))
-    jobref = schedule.every().second.do(hourlySendPrice)
+    VestResponse = requests.get(URL + "fromAPI/Vest")
+    ØstResponse = requests.get(URL + "fromAPI/Øst")
+    print("Response1: " + str(VestResponse))
+    jobref = schedule.every().hour.do(hourlySendPrice)
 # sørger for det maks er 24 timer herefter canceler den de forrige 24 timer hvorefter den starter forfra nederst
 def hourlySendPrice():
     global runcount, jobref
     sendPriceCategory()
     runcount += 1
-    print("runcount: " + str(runcount))
+    print("runcount: " + str(runcount)) 
     if runcount > 24:
         schedule.cancel_job(jobref)
         
@@ -35,13 +35,12 @@ def sendPriceCategory():
     clientSocket = socket(AF_INET, SOCK_DGRAM)
     clientSocket.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
     CurrentTime = time.localtime().tm_hour
-    hourNow = CurrentTime
-    RequestTime = str(hourNow)
+    RequestTime = str(CurrentTime)
     getURL = URL + Zone + "/" + RequestTime
-    Response = requests.get(getURL)
-    print("Response: " + str(Response))
+    response = requests.get(getURL)
+    print("Response: " + str(response))
     #Skal laves om til category når den ikke er null mere og der er lavet en funktion til at udregne den
-    dkK_per_kWh = Response.json().get("dkK_per_kWh")
+    dkK_per_kWh = response.json().get("dkK_per_kWh")
     print("Price " + str(dkK_per_kWh))
     message = json.dumps(dkK_per_kWh)
     print("Message: " + message)
