@@ -41,16 +41,16 @@ def sendPriceCategory():
     getURL = str(URL + Zone + "/" + RequestTime)
     response = requests.get(getURL)    
     print("Response: " + str(response))
-    dkK_per_kWh = response.json().get("dkK_per_kWh")
-    print("Price " + str(dkK_per_kWh))
-    message = json.dumps(dkK_per_kWh) 
+    category = response.json().get("category")
+    print("Price " + str(category))
+    message = json.dumps(category) 
     print("Message: " + message)
     clientSocket.sendto(message.encode(), broadcastAddress)
     clientSocket.close()
 
 #kør en gang hver dag.
 #skal starte klokken midnat
-schedule.every().day.at("17:14").do(RunSchedule)
+schedule.every().day.at("00:00").do(RunSchedule)
 
 #hoolder den tændt, så den kører schedule
 while True:
