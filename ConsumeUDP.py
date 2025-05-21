@@ -32,7 +32,7 @@ def hourlySendPrice():
 
 
 def sendPriceCategory():
-    serverPort = 12000
+    serverPort = 11999
     broadcastAddress = ('255.255.255.255', serverPort)
     clientSocket = socket(AF_INET, SOCK_DGRAM)
     clientSocket.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
