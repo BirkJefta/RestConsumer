@@ -14,7 +14,7 @@ def RunSchedule():
     global jobref
     runcount = 0
     print("RunSchedule")
-    ApiCall = requests.get(URL + "fromAPI")
+    ApiCall = requests.get(URL + "FromAPI") 
     print("Response1: " + str(ApiCall))
     jobref = schedule.every().hour.do(hourlySendPrice)
 
