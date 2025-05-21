@@ -50,7 +50,7 @@ def sendPriceCategory():
 
 #kør en gang hver dag.
 #skal starte klokken midnat
-schedule.every().day.at("00:00").do(RunSchedule)
+schedule.every().day.at("00:01").do(RunSchedule)
 
 #hoolder den tændt, så den kører schedule
 while True:
